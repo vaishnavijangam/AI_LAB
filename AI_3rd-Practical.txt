@@ -1,69 +1,69 @@
-import java.util.*;
+import java.util.*; 
 
 public class BellmanFordSSSP {
-    static final int INF = Integer.MAX_VALUE;
-
+    static final int INF = Integer.MAX_VALUE; // Constant representing positive infinity for distances
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter the number of vertices: ");
-        int V = scanner.nextInt();
-
-        System.out.print("Enter the number of edges: ");
+        
+        System.out.print("Enter the number of vertices: "); 
+        int V = scanner.nextInt(); 
+        
+        System.out.print("Enter the number of edges: "); 
         int E = scanner.nextInt();
-
-        int[][] edges = new int[E][3];
-
+        
+        int[][] edges = new int[E][3]; // 2D array to store edges in format: source destination weight
+        
         System.out.println("Enter the edges in format: source destination weight");
-        for (int i = 0; i < E; i++) {
-            edges[i][0] = scanner.nextInt(); // source
-            edges[i][1] = scanner.nextInt(); // destination
-            edges[i][2] = scanner.nextInt(); // weight
+        for (int i = 0; i < E; i++) { // Loop for reading each edge
+            edges[i][0] = scanner.nextInt(); // Reading source vertex of edge
+            edges[i][1] = scanner.nextInt(); // Reading destination vertex of edge
+            edges[i][2] = scanner.nextInt(); // Reading weight of edge
         }
-
+        
         System.out.print("Enter the source vertex: ");
         int source = scanner.nextInt();
-
-        int[] dist = bellmanFord(V, E, edges, source);
-
+        
+        int[] dist = bellmanFord(V, E, edges, source); // Calling Bellman-Ford algorithm to compute shortest paths
+        
         System.out.println("Shortest distances from source vertex " + source + " are:");
-        for (int i = 0; i < V; i++) {
-            System.out.println("Vertex " + i + ": " + dist[i]);
+        for (int i = 0; i < V; i++) { // Loop for displaying shortest distances from source
+            System.out.println("Vertex " + i + ": " + dist[i]); 
         }
-
+        
         scanner.close();
     }
 
-    static int[] bellmanFord(int V, int E, int[][] edges, int src) {
-        int[] dist = new int[V];
-
+    static int[] bellmanFord(int V, int E, int[][] edges, int src) { // Method for Bellman-Ford algorithm
+        int[] dist = new int[V]; // Array to store shortest distances
+        
         // Step 1: Initialize distances from src to all other vertices as INFINITE
-        Arrays.fill(dist, INF);
-        dist[src] = 0;
-
+        Arrays.fill(dist, INF); // Setting initial distances to infinity
+        dist[src] = 0; // Distance from source to itself is 0
+        
         // Step 2: Relax all edges V-1 times
-        for (int i = 0; i < V - 1; ++i) {
-            for (int j = 0; j < E; ++j) {
-                int u = edges[j][0];
-                int v = edges[j][1];
-                int weight = edges[j][2];
-                if (dist[u] != INF && dist[u] + weight < dist[v]) {
-                    dist[v] = dist[u] + weight;
+        for (int i = 0; i < V - 1; ++i) { // Loop for relaxing edges V-1 times
+            for (int j = 0; j < E; ++j) { // Loop for iterating through each edge
+                int u = edges[j][0]; // Source vertex of edge
+                int v = edges[j][1]; // Destination vertex of edge
+                int weight = edges[j][2]; // Weight of edge
+                if (dist[u] != INF && dist[u] + weight < dist[v]) { // If a shorter path is found
+                    dist[v] = dist[u] + weight; // Update the distance
                 }
             }
         }
-
+        
         // Step 3: Check for negative-weight cycles
-        for (int i = 0; i < E; ++i) {
-            int u = edges[i][0];
-            int v = edges[i][1];
-            int weight = edges[i][2];
-            if (dist[u] != INF && dist[u] + weight < dist[v]) {
-                System.out.println("Graph contains negative weight cycle!");
+        for (int i = 0; i < E; ++i) { // Loop for iterating through each edge
+            int u = edges[i][0]; // Source vertex of edge
+            int v = edges[i][1]; // Destination vertex of edge
+            int weight = edges[i][2]; // Weight of edge
+            if (dist[u] != INF && dist[u] + weight < dist[v]) { // If a shorter path is found after relaxation
+                System.out.println("Graph contains negative weight cycle!"); // Displaying message for negative weight cycle
                 // You can handle negative weight cycles according to your requirement
             }
         }
-
-        return dist;
-    }
+        
+        return dist; 
+    }
 }
